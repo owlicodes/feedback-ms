@@ -1,3 +1,4 @@
+import { AppAlertDialog } from "@/components/app-alert-dialog";
 import { AppSheet } from "@/components/app-sheet";
 import { AppSidebar } from "@/components/app-sidebar";
 import { QueryProvider } from "@/components/providers/query-provider";
@@ -15,6 +16,7 @@ export default function AdminLayout({
         <main className="w-full">
           <SidebarTrigger />
           <AppSheet />
+          <AppAlertDialog />
           <div className="w-full p-4">{children}</div>
         </main>
       </SidebarProvider>
