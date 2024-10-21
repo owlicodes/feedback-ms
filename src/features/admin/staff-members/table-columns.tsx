@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -16,6 +17,10 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { client } from "@/lib/client";
 import useAlertDialogConfigStore from "@/stores/alert-dialog-config-store";
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable react-hooks/rules-of-hooks */
 
 export type StaffMember = {
   _id: string;

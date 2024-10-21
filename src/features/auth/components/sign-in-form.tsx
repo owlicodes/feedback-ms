@@ -54,10 +54,10 @@ export const SignInForm = () => {
         ...values,
       },
       {
-        onRequest: (ctx) => {
+        onRequest: () => {
           setIsLoading(true);
         },
-        onSuccess: (ctx) => {
+        onSuccess: () => {
           setIsLoading(false);
           router.push("/admin/dashboard");
         },

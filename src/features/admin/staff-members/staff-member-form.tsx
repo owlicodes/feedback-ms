@@ -61,10 +61,10 @@ export const StaffMemberForm = () => {
         role: "admin",
       },
       {
-        onRequest: (ctx) => {
+        onRequest: () => {
           setIsLoading(true);
         },
-        onSuccess: (ctx) => {
+        onSuccess: () => {
           toast({
             title: "Create Staff Member",
             description: "Staff member succesfully created.",
