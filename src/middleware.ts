@@ -1,7 +1,7 @@
 import { authMiddleware } from "better-auth/next-js";
 
 export default authMiddleware({
-  redirectTo: "/auth/sign-up",
+  redirectTo: "/auth/sign-in",
 });
 
 export const config = {

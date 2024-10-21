@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { admin } from "better-auth/plugins";
 
 const prisma = new PrismaClient();
 
@@ -11,6 +12,11 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  plugins: [
+    admin({
+      defaultRole: "admin",
+    }),
+  ],
 });
 
 async function main() {
@@ -19,8 +25,12 @@ async function main() {
       name: "josediago",
       email: "josediago@email.com",
       password: process.env.BETTER_AUTH_SEED_ADMIN_PASSWORD,
+      role: "admin",
     },
   });
+
+  // after running the seed, it will create a session as well, remove that session else you won't be able to sign in
+  // there is no seed instructions yet for better-auth, we need to find a better way to handle this in the future
 }
 
 main()

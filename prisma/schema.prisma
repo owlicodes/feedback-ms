@@ -25,6 +25,11 @@ model User {
   emailVerified Boolean
   Session       Session[]
 
+  role       String?
+  banned     Boolean?
+  banReason  String?
+  banExpires Int?
+
   @@map("users")
 }
 
@@ -52,6 +57,8 @@ model Session {
   userAgent String?
   userId    String   @unique
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
 
   @@map("session")
 }
