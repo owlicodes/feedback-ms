@@ -90,7 +90,9 @@ export async function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Feedback MS</SidebarGroupLabel>
+          <SidebarGroupLabel className="bg-blue-500 font-semibold text-white">
+            Feedback MS
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

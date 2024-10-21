@@ -34,7 +34,7 @@ export function AppDataTable<TData, TValue>({
   return (
     <div className="rounded-md border bg-white">
       <Table>
-        <TableHeader className="bg-black font-semibold">
+        <TableHeader className="bg-blue-500 font-semibold">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
