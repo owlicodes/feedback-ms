@@ -1,3 +1,5 @@
+import { headers } from "next/headers";
+
 import { ChevronUp, LayoutDashboard, User2, Users2 } from "lucide-react";
 
 import {
@@ -17,6 +19,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { SignOutButton } from "@/features/auth/components/sign-out-button";
+import { auth } from "@/lib/auth";
 
 const items = [
   {
@@ -31,7 +35,11 @@ const items = [
   },
 ];
 
-export function AppSidebar() {
+export async function AppSidebar() {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -59,7 +67,7 @@ export function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> Username
+                  <User2 /> {session?.user.email}
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
@@ -68,13 +76,7 @@ export function AppSidebar() {
                 className="w-[--radix-popper-anchor-width]"
               >
                 <DropdownMenuItem>
-                  <span>Account</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Billing</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Sign out</span>
+                  <SignOutButton />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

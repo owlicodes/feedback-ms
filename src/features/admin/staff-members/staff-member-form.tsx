@@ -1,6 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -14,7 +18,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import { client } from "@/lib/client";
+import useSheetConfigStore from "@/stores/sheet-config-store";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -34,7 +40,8 @@ const formSchema = z.object({
   }),
 });
 
-export const SignUpForm = () => {
+export const StaffMemberForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,21 +50,37 @@ export const SignUpForm = () => {
       password: "",
     },
   });
+  const { toast } = useToast();
+  const router = useRouter();
+  const { setSheetConfig } = useSheetConfigStore();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const { data, error } = await client.signUp.email(
+    await client.admin.createUser(
       {
         ...values,
+        role: "admin",
       },
       {
         onRequest: (ctx) => {
-          //show loading
+          setIsLoading(true);
         },
         onSuccess: (ctx) => {
-          //redirect to the dashboard
+          toast({
+            title: "Create Staff Member",
+            description: "Staff member succesfully created.",
+          });
+          setIsLoading(false);
+          form.reset();
+          setSheetConfig(undefined);
+          router.refresh();
         },
         onError: (ctx) => {
-          alert(ctx.error.message);
+          setIsLoading(false);
+          toast({
+            title: "Sign In",
+            description: ctx.error.message,
+            variant: "destructive",
+          });
         },
       }
     );
@@ -71,7 +94,7 @@ export const SignUpForm = () => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input autoComplete="off" {...field} />
               </FormControl>
@@ -105,7 +128,16 @@ export const SignUpForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? (
+            <span className="flex items-center gap-2">
+              <Loader className="h-4 w-4 animate-spin" />
+              <span>Submitting...</span>
+            </span>
+          ) : (
+            "Submit"
+          )}
+        </Button>
       </form>
     </Form>
   );

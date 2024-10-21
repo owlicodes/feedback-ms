@@ -102,7 +102,7 @@ export const SignInForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? (
             <span className="flex items-center gap-2">
               <Loader className="h-4 w-4 animate-spin" />

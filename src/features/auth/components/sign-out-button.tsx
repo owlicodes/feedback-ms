@@ -14,5 +14,9 @@ export const SignOutButton = () => {
     });
   };
 
-  return <Button onClick={signOut}>Sign Out</Button>;
+  return (
+    <Button variant="link" onClick={signOut}>
+      Sign Out
+    </Button>
+  );
 };

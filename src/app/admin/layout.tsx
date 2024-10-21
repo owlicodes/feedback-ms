@@ -1,3 +1,4 @@
+import { AppSheet } from "@/components/app-sheet";
 import { AppSidebar } from "@/components/app-sidebar";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -13,7 +14,8 @@ export default function AdminLayout({
         <AppSidebar />
         <main className="w-full">
           <SidebarTrigger />
-          {children}
+          <AppSheet />
+          <div className="w-full p-4">{children}</div>
         </main>
       </SidebarProvider>
     </QueryProvider>
