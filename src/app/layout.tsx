@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { QueryProvider } from "@/components/providers/query-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 import "./globals.css";
 
@@ -22,8 +23,11 @@ export default function RootLayout({
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>"
         />
       </head>
-      <body>
-        <QueryProvider>{children}</QueryProvider>
+      <body className="min-h-screen w-full">
+        <QueryProvider>
+          {children}
+          <Toaster />
+        </QueryProvider>
       </body>
     </html>
   );

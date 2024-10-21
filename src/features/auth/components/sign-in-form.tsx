@@ -1,6 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -14,6 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import { client } from "@/lib/client";
 
 const formSchema = z.object({
@@ -32,6 +37,7 @@ const formSchema = z.object({
 });
 
 export const SignInForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,21 +45,29 @@ export const SignInForm = () => {
       password: "",
     },
   });
+  const { toast } = useToast();
+  const router = useRouter();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const { data, error } = await client.signIn.email(
+    await client.signIn.email(
       {
         ...values,
       },
       {
         onRequest: (ctx) => {
-          //show loading
+          setIsLoading(true);
         },
         onSuccess: (ctx) => {
-          //redirect to the dashboard
+          setIsLoading(false);
+          router.push("/admin/dashboard");
         },
         onError: (ctx) => {
-          alert(ctx.error.message);
+          setIsLoading(false);
+          toast({
+            title: "Sign In",
+            description: ctx.error.message,
+            variant: "destructive",
+          });
         },
       }
     );
@@ -88,7 +102,16 @@ export const SignInForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="w-full">
+          {isLoading ? (
+            <span className="flex items-center gap-2">
+              <Loader className="h-4 w-4 animate-spin" />
+              <span>Submitting...</span>
+            </span>
+          ) : (
+            "Submit"
+          )}
+        </Button>
       </form>
     </Form>
   );
