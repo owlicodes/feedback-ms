@@ -1,11 +1,10 @@
+import { User } from "@prisma/client";
+
 import { AppDataTable } from "@/components/app-data-table";
-import prisma from "@/lib/prisma";
 
 import { columns } from "./table-columns";
 
-export const StaffMembersList = async () => {
-  const users = await prisma.user.findMany();
-
+export const StaffMembersList = ({ users }: { users: User[] }) => {
   const buildUsers = () => {
     if (!users) return [];
 

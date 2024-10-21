@@ -1,8 +1,11 @@
 import { AppPageHeader } from "@/components/app-page-header";
 import { CreateNewButton } from "@/features/admin/staff-members/create-new-button";
 import { StaffMembersList } from "@/features/admin/staff-members/staff-members-list";
+import prisma from "@/lib/prisma";
 
-export default function StaffMembersPage() {
+export default async function StaffMembersPage() {
+  const users = await prisma.user.findMany();
+
   return (
     <div>
       <AppPageHeader>
@@ -12,7 +15,7 @@ export default function StaffMembersPage() {
         </div>
       </AppPageHeader>
       <div className="space-y-4">
-        <StaffMembersList />
+        <StaffMembersList users={users} />
       </div>
     </div>
   );
