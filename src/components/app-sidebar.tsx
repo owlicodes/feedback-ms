@@ -75,7 +75,7 @@ export async function AppSidebar() {
                 side="top"
                 className="w-[--radix-popper-anchor-width]"
               >
-                <DropdownMenuItem>
+                <DropdownMenuItem className="w-full">
                   <SignOutButton />
                 </DropdownMenuItem>
               </DropdownMenuContent>

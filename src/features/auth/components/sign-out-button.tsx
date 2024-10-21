@@ -15,7 +15,7 @@ export const SignOutButton = () => {
   };
 
   return (
-    <Button variant="link" onClick={signOut}>
+    <Button variant="link" onClick={signOut} className="w-full">
       Sign Out
     </Button>
   );
