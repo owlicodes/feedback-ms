@@ -1,7 +1,19 @@
 import { headers } from "next/headers";
 
-import { ChevronUp, LayoutDashboard, User2, Users2 } from "lucide-react";
+import {
+  ChevronRight,
+  ChevronUp,
+  LayoutDashboard,
+  Map,
+  User2,
+  Users2,
+} from "lucide-react";
 
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,20 +30,54 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { SignOutButton } from "@/features/auth/components/sign-out-button";
 import { auth } from "@/lib/auth";
 
 const items = [
   {
-    title: "Dashboard",
-    url: "/admin/dashboard",
+    title: "Overview",
+    url: "#",
     icon: LayoutDashboard,
+    items: [
+      {
+        title: "Dashboard",
+        url: "/admin/dashboard",
+      },
+    ],
   },
   {
-    title: "Staff Members",
-    url: "/admin/staff-members",
+    title: "Users & Staff",
+    url: "#",
     icon: Users2,
+    items: [
+      {
+        title: "Staff Members",
+        url: "/admin/staff-members",
+      },
+      {
+        title: "Users",
+        url: "/admin/users",
+      },
+    ],
+  },
+  {
+    title: "Data",
+    url: "#",
+    icon: Map,
+    items: [
+      {
+        title: "Categories",
+        url: "/admin/categories",
+      },
+      {
+        title: "Roadmap",
+        url: "/admin/roadmap",
+      },
+    ],
   },
 ];
 
@@ -48,14 +94,37 @@ export async function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <Collapsible
+                  key={item.title}
+                  asChild
+                  defaultOpen
+                  className="group/collapsible"
+                >
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild className="bg-secondary">
+                      <SidebarMenuButton tooltip={item.title}>
+                        {item.icon && <item.icon />}
+                        <span className="text-base font-semibold">
+                          {item.title}
+                        </span>
+                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {item.items?.map((subItem) => (
+                          <SidebarMenuSubItem key={subItem.title}>
+                            <SidebarMenuSubButton asChild>
+                              <a href={subItem.url}>
+                                <span>{subItem.title}</span>
+                              </a>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
