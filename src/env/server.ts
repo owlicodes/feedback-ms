@@ -10,6 +10,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "production"]),
     BETTER_AUTH_SECRET: z.string(),
     BETTER_AUTH_URL: z.string().url(),
+    BETTER_AUTH_SEED_ADMIN_PASSWORD: z.string(),
     DATABASE_URL: z.string().url(),
   },
   onValidationError: (error: ZodError) => {
