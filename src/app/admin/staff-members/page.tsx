@@ -5,9 +5,13 @@ import { StaffMembersList } from "@/features/admin/staff-members/staff-members-l
 export default function StaffMembersPage() {
   return (
     <div>
-      <PageHeader>Staff Members</PageHeader>
+      <PageHeader>
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-semibold">Staff Members</h1>
+          <CreateNewButton />
+        </div>
+      </PageHeader>
       <div className="space-y-4">
-        <CreateNewButton />
         <StaffMembersList />
       </div>
     </div>
