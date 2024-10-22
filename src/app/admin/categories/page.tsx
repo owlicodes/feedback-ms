@@ -1,7 +1,11 @@
 import { AppPageHeader } from "@/components/app-page-header";
+import { CategoriesList } from "@/features/admin/categories/categories-list";
 import { CreateNewCategory } from "@/features/admin/categories/create-new-category";
+import prisma from "@/lib/prisma";
 
-export default function CategoriesPage() {
+export default async function CategoriesPage() {
+  const categories = await prisma.category.findMany();
+
   return (
     <div>
       <AppPageHeader>
@@ -10,6 +14,9 @@ export default function CategoriesPage() {
           <CreateNewCategory />
         </div>
       </AppPageHeader>
+      <div>
+        <CategoriesList categories={categories} />
+      </div>
     </div>
   );
 }

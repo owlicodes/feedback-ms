@@ -14,7 +14,7 @@ export default async function StaffMembersPage() {
           <CreateNewButton />
         </div>
       </AppPageHeader>
-      <div className="space-y-4">
+      <div>
         <StaffMembersList users={users} />
       </div>
     </div>
