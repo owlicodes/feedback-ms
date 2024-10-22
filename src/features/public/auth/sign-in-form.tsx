@@ -66,7 +66,7 @@ export const SignInForm = ({ closeDialog }: { closeDialog: () => void }) => {
           setIsLoading(false);
           toast({
             title: "Sign In",
-            description: `${ctx.error.message}`,
+            description: `${ctx.error.message}. Please make sure you have created an account.`,
             variant: "destructive",
           });
         },

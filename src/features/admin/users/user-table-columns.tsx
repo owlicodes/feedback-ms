@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import { client } from "@/lib/client";
 import useAlertDialogConfigStore from "@/stores/alert-dialog-config-store";
 
 import { User } from "./types";
@@ -52,24 +53,27 @@ export const columns: ColumnDef<User>[] = [
           open: true,
           title: `Are you sure you want to delete ${user.name}?`,
           onDelete: async () => {
-            // deleteBoard.mutate(user.id, {
-            //   onSuccess: (data) => {
-            //     toast({
-            //       title: "Delete Board",
-            //       description: data.message,
-            //     });
-            //     router.refresh();
-            //     setAlertDialogConfig(undefined);
-            //   },
-            //   onError: (error) => {
-            //     toast({
-            //       title: "Delete Board",
-            //       description: error.message,
-            //       variant: "destructive",
-            //     });
-            //     setAlertDialogConfig(undefined);
-            //   },
-            // });
+            await client.admin.removeUser(
+              {
+                userId: user.id,
+              },
+              {
+                onSuccess: () => {
+                  toast({
+                    title: "Delete User",
+                    description: "User successfully deleted.",
+                  });
+
+                  router.refresh();
+                },
+                onError: (ctx) => {
+                  toast({
+                    title: "Delete User",
+                    description: ctx.error.message,
+                  });
+                },
+              }
+            );
           },
         });
       };
