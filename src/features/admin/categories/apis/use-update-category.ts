@@ -11,7 +11,7 @@ const updateCategory = ({
   data: UpdateCategory;
 }): Promise<{ message: string }> => {
   return axios
-    .patch("/api/category", { id, ...data })
+    .patch(`/api/category/${id}`, data)
     .then((response) => response.data)
     .catch((error) => {
       throw error.response.data;
