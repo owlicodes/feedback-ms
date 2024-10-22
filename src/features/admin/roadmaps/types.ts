@@ -2,8 +2,8 @@ export type Roadmap = {
   id: string;
   name: string;
   description: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type CreateRoadmap = {

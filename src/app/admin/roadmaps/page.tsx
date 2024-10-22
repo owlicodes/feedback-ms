@@ -1,7 +1,11 @@
 import { AppPageHeader } from "@/components/app-page-header";
 import { CreateNewRoadmap } from "@/features/admin/roadmaps/create-new-roadmap";
+import { RoadmapsList } from "@/features/admin/roadmaps/roadmaps-list";
+import prisma from "@/lib/prisma";
 
-export default function RoadmapsPage() {
+export default async function RoadmapsPage() {
+  const roadmaps = await prisma.roadmap.findMany();
+
   return (
     <div>
       <AppPageHeader>
@@ -10,9 +14,9 @@ export default function RoadmapsPage() {
           <CreateNewRoadmap />
         </div>
       </AppPageHeader>
-      {/* <div>
-        <StaffMembersList users={users} />
-      </div> */}
+      <div>
+        <RoadmapsList roadmaps={roadmaps} />
+      </div>
     </div>
   );
 }
