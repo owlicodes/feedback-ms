@@ -1,8 +1,10 @@
 import { AppPageHeader } from "@/components/app-page-header";
+import { BoardsList } from "@/features/admin/boards/boards-list";
 import { CreateNewBoard } from "@/features/admin/boards/create-new-board";
+import prisma from "@/lib/prisma";
 
 export default async function BoardsPage() {
-  // const boards = await prisma.board.findMany();
+  const boards = await prisma.board.findMany();
 
   return (
     <div>
@@ -12,7 +14,9 @@ export default async function BoardsPage() {
           <CreateNewBoard />
         </div>
       </AppPageHeader>
-      <div>{/* <RoadmapsList roadmaps={roadmaps} /> */}</div>
+      <div>
+        <BoardsList boards={boards} />
+      </div>
     </div>
   );
 }
