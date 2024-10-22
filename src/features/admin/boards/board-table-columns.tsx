@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import useAlertDialogConfigStore from "@/stores/alert-dialog-config-store";
 import useSheetConfigStore from "@/stores/sheet-config-store";
 
+import { useDeleteBoard } from "./apis/use-delete-board";
 import { BoardForm } from "./board-form";
 import { Board } from "./types";
 
@@ -49,30 +50,31 @@ export const columns: ColumnDef<Board>[] = [
       const { setSheetConfig } = useSheetConfigStore();
       const { toast } = useToast();
       const router = useRouter();
+      const deleteBoard = useDeleteBoard();
 
       const showDeleteAlertDialog = () => {
         setAlertDialogConfig({
           open: true,
           title: `Are you sure you want to delete ${board.name}?`,
           onDelete: async () => {
-            // deleteRoadmap.mutate(roadmap.id, {
-            //   onSuccess: (data) => {
-            //     toast({
-            //       title: "Delete Roadmap",
-            //       description: data.message,
-            //     });
-            //     router.refresh();
-            //     setAlertDialogConfig(undefined);
-            //   },
-            //   onError: (error) => {
-            //     toast({
-            //       title: "Delete Roadmap",
-            //       description: error.message,
-            //       variant: "destructive",
-            //     });
-            //     setAlertDialogConfig(undefined);
-            //   },
-            // });
+            deleteBoard.mutate(board.id, {
+              onSuccess: (data) => {
+                toast({
+                  title: "Delete Board",
+                  description: data.message,
+                });
+                router.refresh();
+                setAlertDialogConfig(undefined);
+              },
+              onError: (error) => {
+                toast({
+                  title: "Delete Board",
+                  description: error.message,
+                  variant: "destructive",
+                });
+                setAlertDialogConfig(undefined);
+              },
+            });
           },
         });
       };
