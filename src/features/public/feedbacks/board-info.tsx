@@ -14,7 +14,11 @@ import useSelectedBoardStore from "@/stores/selected-board-store";
 
 import { FeedbackForm } from "./feedback-form";
 
-export const BoardInfo = () => {
+type BoardInfoProps = {
+  userId: string | undefined;
+};
+
+export const BoardInfo = ({ userId }: BoardInfoProps) => {
   const { board } = useSelectedBoardStore();
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
 
@@ -48,8 +52,12 @@ export const BoardInfo = () => {
       <div className="space-y-2 text-center">
         <h2 className="text-lg font-semibold">{board.name}</h2>
         <p className="text-sm text-gray-600">{board.description}</p>
-        <Button className="w-full" onClick={() => setIsFormDialogOpen(true)}>
-          Make A Suggestion
+        <Button
+          className="w-full"
+          onClick={() => setIsFormDialogOpen(true)}
+          disabled={!userId}
+        >
+          {!userId ? "Please Sign In" : "Make A Suggestion"}
         </Button>
       </div>
     </>

@@ -1,8 +1,15 @@
+import { headers } from "next/headers";
+
 import { AppPublicHeader } from "@/components/app-public-header";
 import { BoardInfo } from "@/features/public/feedbacks/board-info";
 import { FeedbacksList } from "@/features/public/feedbacks/feedbacks-list";
+import { auth } from "@/lib/auth";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+
   return (
     <div>
       <div className="bg-white py-4 shadow-md">
@@ -13,7 +20,7 @@ export default function Home() {
           <FeedbacksList />
         </div>
         <div className="h-fit basis-1/3 bg-white p-4 shadow-md">
-          <BoardInfo />
+          <BoardInfo userId={session?.user.id} />
         </div>
       </div>
     </div>
