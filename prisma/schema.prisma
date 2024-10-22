@@ -71,3 +71,13 @@ model Verification {
 
   @@map("verification")
 }
+
+model Category {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("category")
+}
