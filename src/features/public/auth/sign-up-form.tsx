@@ -31,17 +31,21 @@ const formSchema = z.object({
     .email({
       message: "Invalid email.",
     }),
+  name: z.string().trim().min(1, {
+    message: "Name is required.",
+  }),
   password: z.string().min(8, {
     message: "Password must be atleast 8 characters.",
   }),
 });
 
-export const SignInForm = ({ closeDialog }: { closeDialog: () => void }) => {
+export const SignUpForm = ({ closeDialog }: { closeDialog: () => void }) => {
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
+      name: "",
       password: "",
     },
   });
@@ -49,7 +53,7 @@ export const SignInForm = ({ closeDialog }: { closeDialog: () => void }) => {
   const router = useRouter();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await client.signIn.email(
+    await client.signUp.email(
       {
         ...values,
       },
@@ -65,8 +69,8 @@ export const SignInForm = ({ closeDialog }: { closeDialog: () => void }) => {
         onError: (ctx) => {
           setIsLoading(false);
           toast({
-            title: "Sign In",
-            description: `${ctx.error.message}`,
+            title: "Sign Up",
+            description: `${ctx.error.message}. If you already have an account, please sign in instead.`,
             variant: "destructive",
           });
         },
@@ -85,6 +89,19 @@ export const SignInForm = ({ closeDialog }: { closeDialog: () => void }) => {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input type="email" autoComplete="off" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input autoComplete="off" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SignIn } from "@/features/public/auth/sign-in";
+import { SignUp } from "@/features/public/auth/sign-up";
 import { UserAvatar } from "@/features/public/auth/user-avatar";
 import { auth } from "@/lib/auth";
 
@@ -34,7 +35,10 @@ export const AppPublicHeader = async () => {
       {session ? (
         <UserAvatar name={session.user.name} email={session.user.email} />
       ) : (
-        <SignIn />
+        <div className="flex items-center gap-4">
+          <SignUp />
+          <SignIn />
+        </div>
       )}
     </div>
   );
