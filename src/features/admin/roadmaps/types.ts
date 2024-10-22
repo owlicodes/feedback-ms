@@ -10,3 +10,5 @@ export type CreateRoadmap = {
   name: string;
   description: string;
 };
+
+export type UpdateRoadmap = CreateRoadmap;

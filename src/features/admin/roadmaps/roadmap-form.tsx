@@ -3,11 +3,10 @@
 import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
+import { AppSubmitButton } from "@/components/app-submit-button";
 import {
   Form,
   FormControl,
@@ -22,6 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import useSheetConfigStore from "@/stores/sheet-config-store";
 
 import { useCreateRoadmap } from "./apis/use-create-roadmap";
+import { useUpdateRoadmap } from "./apis/use-update-roadmap";
 import { Roadmap } from "./types";
 
 const formSchema = z.object({
@@ -45,6 +45,7 @@ export const RoadmapForm = ({ data }: { data?: Roadmap }) => {
   const router = useRouter();
   const { setSheetConfig } = useSheetConfigStore();
   const createRoadmap = useCreateRoadmap();
+  const updateRoadmap = useUpdateRoadmap();
 
   const onSuccessHandler = (title: string, description: string) => {
     toast({
@@ -66,22 +67,21 @@ export const RoadmapForm = ({ data }: { data?: Roadmap }) => {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
     if (data) {
-      // updateCategory.mutate(
-      //   {
-      //     id: data.id,
-      //     data: values,
-      //   },
-      //   {
-      //     onSuccess: (data) => {
-      //       onSuccessHandler("Update Category", data.message);
-      //     },
-      //     onError: (error) => {
-      //       onErrorHandler("Update Category", error.message);
-      //     },
-      //   }
-      // );
+      updateRoadmap.mutate(
+        {
+          id: data.id,
+          data: values,
+        },
+        {
+          onSuccess: (data) => {
+            onSuccessHandler("Update Roadmap", data.message);
+          },
+          onError: (error) => {
+            onErrorHandler("Update Roadmap", error.message);
+          },
+        }
+      );
     } else {
       createRoadmap.mutate(values, {
         onSuccess: (data) => {
@@ -123,20 +123,9 @@ export const RoadmapForm = ({ data }: { data?: Roadmap }) => {
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={createRoadmap.isPending}
-        >
-          {createRoadmap.isPending ? (
-            <span className="flex items-center gap-2">
-              <Loader className="h-4 w-4 animate-spin" />
-              <span>Submitting...</span>
-            </span>
-          ) : (
-            "Submit"
-          )}
-        </Button>
+        <AppSubmitButton
+          isPending={createRoadmap.isPending || updateRoadmap.isPending}
+        />
       </form>
     </Form>
   );
