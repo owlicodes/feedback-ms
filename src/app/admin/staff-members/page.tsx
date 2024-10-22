@@ -4,7 +4,11 @@ import { StaffMembersList } from "@/features/admin/staff-members/staff-members-l
 import prisma from "@/lib/prisma";
 
 export default async function StaffMembersPage() {
-  const users = await prisma.user.findMany();
+  const users = await prisma.user.findMany({
+    where: {
+      role: "admin",
+    },
+  });
 
   return (
     <div>
