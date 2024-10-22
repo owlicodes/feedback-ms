@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import useAlertDialogConfigStore from "@/stores/alert-dialog-config-store";
 import useSheetConfigStore from "@/stores/sheet-config-store";
 
+import { useDeleteRoadmap } from "./apis/use-delete-roadmap";
 import { RoadmapForm } from "./roadmap-form";
 import { Roadmap } from "./types";
 
@@ -49,30 +50,31 @@ export const columns: ColumnDef<Roadmap>[] = [
       const { setSheetConfig } = useSheetConfigStore();
       const { toast } = useToast();
       const router = useRouter();
+      const deleteRoadmap = useDeleteRoadmap();
 
       const showDeleteAlertDialog = () => {
         setAlertDialogConfig({
           open: true,
           title: `Are you sure you want to delete ${roadmap.name}?`,
           onDelete: async () => {
-            // deleteCategory.mutate(category.id, {
-            //   onSuccess: (data) => {
-            //     toast({
-            //       title: "Delete Category",
-            //       description: data.message,
-            //     });
-            //     router.refresh();
-            //     setAlertDialogConfig(undefined);
-            //   },
-            //   onError: (error) => {
-            //     toast({
-            //       title: "Delete Category",
-            //       description: error.message,
-            //       variant: "destructive",
-            //     });
-            //     setAlertDialogConfig(undefined);
-            //   },
-            // });
+            deleteRoadmap.mutate(roadmap.id, {
+              onSuccess: (data) => {
+                toast({
+                  title: "Delete Roadmap",
+                  description: data.message,
+                });
+                router.refresh();
+                setAlertDialogConfig(undefined);
+              },
+              onError: (error) => {
+                toast({
+                  title: "Delete Roadmap",
+                  description: error.message,
+                  variant: "destructive",
+                });
+                setAlertDialogConfig(undefined);
+              },
+            });
           },
         });
       };

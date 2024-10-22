@@ -51,36 +51,36 @@ export async function PATCH(request: Request, { params }: Params) {
   }
 }
 
-// export async function DELETE(request: Request, { params }: Params) {
-//   try {
-//     const { id } = params;
+export async function DELETE(request: Request, { params }: Params) {
+  try {
+    const { id } = params;
 
-//     const session = await auth.api.getSession({
-//       headers: headers(),
-//     });
+    const session = await auth.api.getSession({
+      headers: headers(),
+    });
 
-//     if (session?.user.role !== "admin") {
-//       return NextResponse.json(
-//         { message: "User not authorized to perform this action" },
-//         { status: 401 }
-//       );
-//     }
+    if (session?.user.role !== "admin") {
+      return NextResponse.json(
+        { message: "User not authorized to perform this action" },
+        { status: 401 }
+      );
+    }
 
-//     await prisma.category.delete({
-//       where: {
-//         id,
-//       },
-//     });
+    await prisma.roadmap.delete({
+      where: {
+        id,
+      },
+    });
 
-//     return NextResponse.json({
-//       message: "Category deleted successfully",
-//     });
-//   } catch (error: unknown) {
-//     console.log("Delete category failed: ", error);
+    return NextResponse.json({
+      message: "Roadmap deleted successfully",
+    });
+  } catch (error: unknown) {
+    console.log("Delete roadmap failed: ", error);
 
-//     return NextResponse.json(
-//       { message: "Unable to delete category, please see server logs." },
-//       { status: 500 }
-//     );
-//   }
-// }
+    return NextResponse.json(
+      { message: "Unable to delete roadmap, please see server logs." },
+      { status: 500 }
+    );
+  }
+}
