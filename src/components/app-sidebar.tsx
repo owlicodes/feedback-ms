@@ -65,7 +65,7 @@ const items = [
     ],
   },
   {
-    title: "Data",
+    title: "Feedbacks",
     url: "#",
     icon: Map,
     items: [
@@ -80,6 +80,10 @@ const items = [
       {
         title: "Boards",
         url: "/admin/boards",
+      },
+      {
+        title: "Ideas",
+        url: "/admin/ideas",
       },
     ],
   },
