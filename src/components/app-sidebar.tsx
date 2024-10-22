@@ -74,11 +74,11 @@ const items = [
         url: "/admin/categories",
       },
       {
-        title: "Roadmap",
+        title: "Roadmaps",
         url: "/admin/roadmaps",
       },
       {
-        title: "Board",
+        title: "Boards",
         url: "/admin/boards",
       },
     ],
