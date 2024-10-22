@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { MoreHorizontal, Trash } from "lucide-react";
+import { Edit, MoreHorizontal, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +15,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import useAlertDialogConfigStore from "@/stores/alert-dialog-config-store";
+import useSheetConfigStore from "@/stores/sheet-config-store";
 
+import { CategoryForm } from "./category-form";
 import { Category } from "./types";
 
 /* eslint-disable react-hooks/rules-of-hooks */
@@ -44,6 +46,7 @@ export const columns: ColumnDef<Category>[] = [
     cell: ({ row }) => {
       const category = row.original;
       const { setAlertDialogConfig } = useAlertDialogConfigStore();
+      const { setSheetConfig } = useSheetConfigStore();
       const { toast } = useToast();
       const router = useRouter();
 
@@ -57,6 +60,15 @@ export const columns: ColumnDef<Category>[] = [
         });
       };
 
+      const showEditCategoryForm = () => {
+        setSheetConfig({
+          open: true,
+          title: "Category",
+          description: `Edit ${category.name}`,
+          content: <CategoryForm data={category} />,
+        });
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -66,6 +78,15 @@ export const columns: ColumnDef<Category>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={showEditCategoryForm}
+            >
+              <div className="flex items-center gap-2">
+                <Edit className="h-4 w-4" />
+                <span>Edit</span>
+              </div>
+            </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer"
               onClick={showDeleteAlertDialog}

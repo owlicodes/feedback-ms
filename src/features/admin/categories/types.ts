@@ -7,3 +7,4 @@ export type Category = {
 };
 
 export type CreateCategory = Pick<Category, "name" | "description">;
+export type UpdateCategory = Pick<Category, "name" | "description">;

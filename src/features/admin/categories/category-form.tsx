@@ -22,6 +22,8 @@ import { useToast } from "@/hooks/use-toast";
 import useSheetConfigStore from "@/stores/sheet-config-store";
 
 import { useCreateCategory } from "./apis/use-create-category";
+import { useUpdateCategory } from "./apis/use-update-category";
+import { Category } from "./types";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -32,39 +34,65 @@ const formSchema = z.object({
   }),
 });
 
-export const CategoryForm = () => {
+export const CategoryForm = ({ data }: { data?: Category }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
+      name: data ? data.name : "",
+      description: data ? data.description : "",
     },
   });
   const { toast } = useToast();
   const router = useRouter();
   const { setSheetConfig } = useSheetConfigStore();
   const createCategory = useCreateCategory();
+  const updateCategory = useUpdateCategory();
+
+  const onSuccessHandler = (title: string, description: string) => {
+    toast({
+      title,
+      description,
+    });
+
+    router.refresh();
+
+    setSheetConfig(undefined);
+  };
+
+  const onErrorHandler = (title: string, description: string) => {
+    toast({
+      title,
+      description,
+      variant: "destructive",
+    });
+  };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    createCategory.mutate(values, {
-      onSuccess: (data) => {
-        toast({
-          title: "Create Category",
-          description: data.message,
-        });
-
-        router.refresh();
-
-        setSheetConfig(undefined);
-      },
-      onError: (error) => {
-        toast({
-          title: "Create Category",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
-    });
+    if (data) {
+      updateCategory.mutate(
+        {
+          id: data.id,
+          data: values,
+        },
+        {
+          onSuccess: (data) => {
+            onSuccessHandler("Update Category", data.message);
+          },
+          onError: (error) => {
+            onErrorHandler("Update Category", error.message);
+          },
+        }
+      );
+    } else {
+      createCategory.mutate(values, {
+        onSuccess: (data) => {
+          onSuccessHandler("Create Category", data.message);
+        },
+        onError: (error) => {
+          onErrorHandler("Create Category", error.message);
+        },
+      });
+    }
   };
 
   return (
@@ -99,9 +127,9 @@ export const CategoryForm = () => {
         <Button
           type="submit"
           className="w-full"
-          disabled={createCategory.isPending}
+          disabled={createCategory.isPending || updateCategory.isPending}
         >
-          {createCategory.isPending ? (
+          {createCategory.isPending || updateCategory.isPending ? (
             <span className="flex items-center gap-2">
               <Loader className="h-4 w-4 animate-spin" />
               <span>Submitting...</span>
