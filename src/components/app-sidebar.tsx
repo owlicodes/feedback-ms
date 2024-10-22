@@ -75,7 +75,11 @@ const items = [
       },
       {
         title: "Roadmap",
-        url: "/admin/roadmap",
+        url: "/admin/roadmaps",
+      },
+      {
+        title: "Board",
+        url: "/admin/boards",
       },
     ],
   },
