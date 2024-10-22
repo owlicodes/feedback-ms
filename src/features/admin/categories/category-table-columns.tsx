@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import useAlertDialogConfigStore from "@/stores/alert-dialog-config-store";
 import useSheetConfigStore from "@/stores/sheet-config-store";
 
+import { useDeleteCategory } from "./apis/use-delete-category";
 import { CategoryForm } from "./category-form";
 import { Category } from "./types";
 
@@ -49,13 +50,34 @@ export const columns: ColumnDef<Category>[] = [
       const { setSheetConfig } = useSheetConfigStore();
       const { toast } = useToast();
       const router = useRouter();
+      const deleteCategory = useDeleteCategory();
 
       const showDeleteAlertDialog = () => {
         setAlertDialogConfig({
           open: true,
           title: `Are you sure you want to delete ${category.name}?`,
           onDelete: async () => {
-            console.log("Proceed with deletion...");
+            deleteCategory.mutate(category.id, {
+              onSuccess: (data) => {
+                toast({
+                  title: "Delete Category",
+                  description: data.message,
+                });
+
+                router.refresh();
+
+                setAlertDialogConfig(undefined);
+              },
+              onError: (error) => {
+                toast({
+                  title: "Delete Category",
+                  description: error.message,
+                  variant: "destructive",
+                });
+
+                setAlertDialogConfig(undefined);
+              },
+            });
           },
         });
       };
