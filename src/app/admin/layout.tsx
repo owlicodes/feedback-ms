@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { AppAlertDialog } from "@/components/app-alert-dialog";
 import { AppSheet } from "@/components/app-sheet";
 import { AppSidebar } from "@/components/app-sidebar";
-import { QueryProvider } from "@/components/providers/query-provider";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
 
@@ -22,16 +21,14 @@ export default async function AdminLayout({
   }
 
   return (
-    <QueryProvider>
-      <SidebarProvider>
-        <AppSidebar />
-        <main className="w-full">
-          <SidebarTrigger />
-          <AppSheet />
-          <AppAlertDialog />
-          <div className="w-full p-4">{children}</div>
-        </main>
-      </SidebarProvider>
-    </QueryProvider>
+    <SidebarProvider>
+      <AppSidebar />
+      <main className="w-full">
+        <SidebarTrigger />
+        <AppSheet />
+        <AppAlertDialog />
+        <div className="w-full p-4">{children}</div>
+      </main>
+    </SidebarProvider>
   );
 }

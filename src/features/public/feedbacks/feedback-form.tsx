@@ -17,7 +17,8 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import useSheetConfigStore from "@/stores/sheet-config-store";
+
+import { useCreateFeedback } from "./apis/use-create-feedback";
 
 const formSchema = z.object({
   feedback: z.string().trim().min(1, {
@@ -25,7 +26,15 @@ const formSchema = z.object({
   }),
 });
 
-export const FeedbackForm = () => {
+type FeedbackFormProps = {
+  userId: string;
+  closeFormDialog: () => void;
+};
+
+export const FeedbackForm = ({
+  userId,
+  closeFormDialog,
+}: FeedbackFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,7 +43,7 @@ export const FeedbackForm = () => {
   });
   const { toast } = useToast();
   const router = useRouter();
-  const { setSheetConfig } = useSheetConfigStore();
+  const createFeedback = useCreateFeedback();
 
   const onSuccessHandler = (title: string, description: string) => {
     toast({
@@ -44,7 +53,7 @@ export const FeedbackForm = () => {
 
     router.refresh();
 
-    setSheetConfig(undefined);
+    closeFormDialog();
   };
 
   const onErrorHandler = (title: string, description: string) => {
@@ -56,14 +65,20 @@ export const FeedbackForm = () => {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // createCategory.mutate(values, {
-    //   onSuccess: (data) => {
-    //     onSuccessHandler("Create Category", data.message);
-    //   },
-    //   onError: (error) => {
-    //     onErrorHandler("Create Category", error.message);
-    //   },
-    // });
+    createFeedback.mutate(
+      {
+        userId,
+        feedback: values.feedback,
+      },
+      {
+        onSuccess: (data) => {
+          onSuccessHandler("Create Feedback", data.message);
+        },
+        onError: (error) => {
+          onErrorHandler("Create Feedback", error.message);
+        },
+      }
+    );
   };
 
   return (
@@ -82,7 +97,7 @@ export const FeedbackForm = () => {
             </FormItem>
           )}
         />
-        <AppSubmitButton isPending={false} />
+        <AppSubmitButton isPending={createFeedback.isPending} />
       </form>
     </Form>
   );

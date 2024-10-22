@@ -45,7 +45,10 @@ export const BoardInfo = ({ userId }: BoardInfoProps) => {
             </DialogDescription>
           </DialogHeader>
 
-          <FeedbackForm />
+          <FeedbackForm
+            userId={userId!}
+            closeFormDialog={() => setIsFormDialogOpen(false)}
+          />
         </DialogContent>
       </Dialog>
 
