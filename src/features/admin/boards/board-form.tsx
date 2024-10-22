@@ -21,6 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import useSheetConfigStore from "@/stores/sheet-config-store";
 
 import { useCreateBoard } from "./apis/use-create-board";
+import { useUpdateBoard } from "./apis/use-update-board";
 import { Board } from "./types";
 
 const formSchema = z.object({
@@ -44,6 +45,7 @@ export const BoardForm = ({ data }: { data?: Board }) => {
   const router = useRouter();
   const { setSheetConfig } = useSheetConfigStore();
   const createBoard = useCreateBoard();
+  const updateBoard = useUpdateBoard();
 
   const onSuccessHandler = (title: string, description: string) => {
     toast({
@@ -66,20 +68,20 @@ export const BoardForm = ({ data }: { data?: Board }) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (data) {
-      // updateCategory.mutate(
-      //   {
-      //     id: data.id,
-      //     data: values,
-      //   },
-      //   {
-      //     onSuccess: (data) => {
-      //       onSuccessHandler("Update Category", data.message);
-      //     },
-      //     onError: (error) => {
-      //       onErrorHandler("Update Category", error.message);
-      //     },
-      //   }
-      // );
+      updateBoard.mutate(
+        {
+          id: data.id,
+          data: values,
+        },
+        {
+          onSuccess: (data) => {
+            onSuccessHandler("Update Category", data.message);
+          },
+          onError: (error) => {
+            onErrorHandler("Update Category", error.message);
+          },
+        }
+      );
     } else {
       createBoard.mutate(values, {
         onSuccess: (data) => {
@@ -121,7 +123,9 @@ export const BoardForm = ({ data }: { data?: Board }) => {
             </FormItem>
           )}
         />
-        <AppSubmitButton isPending={createBoard.isPending} />
+        <AppSubmitButton
+          isPending={createBoard.isPending || updateBoard.isPending}
+        />
       </form>
     </Form>
   );

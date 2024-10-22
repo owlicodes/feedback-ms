@@ -7,3 +7,4 @@ export type Board = {
 };
 
 export type CreateBoard = Pick<Board, "name" | "description">;
+export type UpdateBoard = CreateBoard;
