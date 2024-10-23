@@ -16,6 +16,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import useAlertDialogConfigStore from "@/stores/alert-dialog-config-store";
 
+import { useDeleteComment } from "./apis/use-delete-board";
 import { TComment } from "./types";
 
 /* eslint-disable react-hooks/rules-of-hooks */
@@ -50,30 +51,31 @@ export const columns: ColumnDef<TComment>[] = [
       const { setAlertDialogConfig } = useAlertDialogConfigStore();
       const { toast } = useToast();
       const router = useRouter();
+      const deleteComment = useDeleteComment();
 
       const showDeleteAlertDialog = () => {
         setAlertDialogConfig({
           open: true,
           title: `Are you sure you want to delete comment?`,
           onDelete: async () => {
-            // deleteBoard.mutate(comment.id, {
-            //   onSuccess: (data) => {
-            //     toast({
-            //       title: "Delete Board",
-            //       description: data.message,
-            //     });
-            //     router.refresh();
-            //     setAlertDialogConfig(undefined);
-            //   },
-            //   onError: (error) => {
-            //     toast({
-            //       title: "Delete Board",
-            //       description: error.message,
-            //       variant: "destructive",
-            //     });
-            //     setAlertDialogConfig(undefined);
-            //   },
-            // });
+            deleteComment.mutate(comment.id, {
+              onSuccess: (data) => {
+                toast({
+                  title: "Delete Comment",
+                  description: data.message,
+                });
+                router.refresh();
+                setAlertDialogConfig(undefined);
+              },
+              onError: (error) => {
+                toast({
+                  title: "Delete Comment",
+                  description: error.message,
+                  variant: "destructive",
+                });
+                setAlertDialogConfig(undefined);
+              },
+            });
           },
         });
       };
