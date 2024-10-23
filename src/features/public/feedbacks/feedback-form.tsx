@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import useSelectedBoardStore from "@/stores/selected-board-store";
 
 import { useCreateFeedback } from "./apis/use-create-feedback";
 
@@ -44,6 +45,7 @@ export const FeedbackForm = ({
   const { toast } = useToast();
   const router = useRouter();
   const createFeedback = useCreateFeedback();
+  const { board } = useSelectedBoardStore();
 
   const onSuccessHandler = (title: string, description: string) => {
     toast({
@@ -68,6 +70,7 @@ export const FeedbackForm = ({
     createFeedback.mutate(
       {
         userId,
+        boardId: board!.id,
         feedback: values.feedback,
       },
       {

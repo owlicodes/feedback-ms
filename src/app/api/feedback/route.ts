@@ -8,7 +8,7 @@ import prisma from "@/lib/prisma";
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-    const { userId, feedback } = data as CreateFeedback;
+    const { userId, boardId, feedback } = data as CreateFeedback;
 
     const session = await auth.api.getSession({
       headers: headers(),
@@ -24,6 +24,7 @@ export async function POST(request: Request) {
     await prisma.feedback.create({
       data: {
         userId,
+        boardId,
         feedback,
       },
     });

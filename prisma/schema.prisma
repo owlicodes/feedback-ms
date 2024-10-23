@@ -92,11 +92,12 @@ model Roadmap {
 }
 
 model Board {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Feedback    Feedback[]
 
   @@map("board")
 }
@@ -110,6 +111,9 @@ model Feedback {
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
+
+  board   Board  @relation(fields: [boardId], references: [id])
+  boardId String @db.ObjectId
 
   category   Category? @relation(fields: [categoryId], references: [id])
   categoryId String?   @db.ObjectId
