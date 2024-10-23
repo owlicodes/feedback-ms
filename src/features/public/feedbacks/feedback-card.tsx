@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import { Feedback } from "@prisma/client";
 import { ChevronUp, MessageSquare } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,8 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
+import { FeedbackData } from "./types";
+
 type FeedbackCardProps = {
-  feedback: Feedback;
+  feedback: FeedbackData;
 };
 
 export default function FeedbackCard({ feedback }: FeedbackCardProps) {
@@ -42,11 +43,13 @@ export default function FeedbackCard({ feedback }: FeedbackCardProps) {
                     src="/placeholder.svg?height=32&width=32"
                     alt="User avatar"
                   />
-                  <AvatarFallback>U</AvatarFallback>
+                  <AvatarFallback>
+                    {feedback.user.email.slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
-                <p className="text-sm font-medium">user@example.com</p>
+                <p className="text-sm font-medium">{feedback.user.email}</p>
               </div>
-              <Badge variant="secondary">In Progress</Badge>
+              <Badge variant="secondary">{feedback.roadmap.name}</Badge>
             </div>
             <p className="pl-2 text-sm">{feedback.feedback}</p>
           </div>

@@ -16,6 +16,10 @@ export async function GET(request: Request, { params }: Params) {
       where: {
         boardId,
       },
+      include: {
+        user: true,
+        roadmap: true,
+      },
     });
 
     return NextResponse.json(feedbacks);

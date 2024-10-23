@@ -1,10 +1,11 @@
-import { Feedback } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
+import { FeedbackData } from "../types";
+
 const getBoardFeedbacks = (
   boardId: string | undefined
-): Promise<Feedback[]> => {
+): Promise<FeedbackData[]> => {
   return axios
     .get(`/api/feedback/board/${boardId}`)
     .then((response) => response.data)

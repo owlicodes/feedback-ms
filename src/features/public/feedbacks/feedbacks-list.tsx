@@ -13,7 +13,7 @@ export const FeedbacksList = () => {
 
   if (feedbacks.isLoading) {
     return (
-      <div className="w-full justify-center">
+      <div className="flex w-full justify-center">
         <Loader className="h-4 w-4 animate-spin" />
       </div>
     );
