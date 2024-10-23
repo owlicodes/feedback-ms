@@ -15,6 +15,7 @@ export async function GET(request: Request, { params }: Params) {
     const feedbacks = await prisma.feedback.findMany({
       where: {
         boardId,
+        status: "APPROVED",
       },
       include: {
         user: true,

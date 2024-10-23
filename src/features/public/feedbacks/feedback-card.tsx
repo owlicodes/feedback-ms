@@ -1,14 +1,12 @@
 "use client";
 
-import { useState } from "react";
-
-import { MessageSquare, ThumbsUp } from "lucide-react";
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { client } from "@/lib/client";
 
+import { FeedbackCardAvatar } from "./feedback-card-avatar";
+import { FeedbackCardComments } from "./feedback-card-comments";
+import { FeedbackCardUpvote } from "./feedback-card-upvote";
 import { FeedbackData } from "./types";
 
 type FeedbackCardProps = {
@@ -16,42 +14,17 @@ type FeedbackCardProps = {
 };
 
 export default function FeedbackCard({ feedback }: FeedbackCardProps) {
-  const [upvotes, setUpvotes] = useState(0);
-  const [expanded, setExpanded] = useState(false);
-
-  const handleUpvote = () => {
-    setUpvotes(upvotes + 1);
-  };
-
-  const toggleExpand = () => {
-    setExpanded(!expanded);
-  };
+  const session = client.useSession();
 
   return (
     <Card className="w-full">
       <CardContent className="p-6">
         <div className="flex items-start space-x-4">
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-9 w-9"
-            onClick={handleUpvote}
-          >
-            <ThumbsUp className="h-4 w-4" />
-            <span className="sr-only">Upvote</span>
-          </Button>
+          {session.data?.user && <FeedbackCardUpvote />}
           <div className="flex-1 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Avatar>
-                  <AvatarImage
-                    src="/placeholder.svg?height=32&width=32"
-                    alt="User avatar"
-                  />
-                  <AvatarFallback className="bg-blue-500 text-white">
-                    {feedback.user.email.slice(0, 2).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <FeedbackCardAvatar email={feedback.user.email} />
                 <p className="text-sm font-medium">{feedback.user.email}</p>
               </div>
               <Badge variant="secondary">{feedback.roadmap?.name}</Badge>
@@ -60,32 +33,7 @@ export default function FeedbackCard({ feedback }: FeedbackCardProps) {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex items-center justify-between bg-secondary/10 px-6">
-        <div className="text-sm text-muted-foreground">
-          {upvotes} upvote{upvotes !== 1 && "s"}
-        </div>
-        <Button variant="ghost" size="sm" onClick={toggleExpand}>
-          <MessageSquare className="mr-2 h-4 w-4" />
-          {expanded ? "Hide" : "Show"} Comments
-        </Button>
-      </CardFooter>
-      {expanded && (
-        <CardContent className="bg-secondary/20 p-6">
-          <div className="space-y-4">
-            <p className="text-sm">
-              <strong>User1:</strong> Great post! Very insightful.
-            </p>
-            <p className="text-sm">
-              <strong>User2:</strong> I have a question about this. Can you
-              elaborate?
-            </p>
-            <p className="text-sm">
-              <strong>User3:</strong> Thanks for sharing your thoughts on this
-              topic.
-            </p>
-          </div>
-        </CardContent>
-      )}
+      <FeedbackCardComments />
     </Card>
   );
 }
