@@ -110,3 +110,37 @@ export async function PATCH(request: Request, { params }: Params) {
     );
   }
 }
+
+export async function DELETE(request: Request, { params }: Params) {
+  try {
+    const { id } = params;
+
+    const session = await auth.api.getSession({
+      headers: headers(),
+    });
+
+    if (session?.user.role !== "admin") {
+      return NextResponse.json(
+        { message: "User not authorized to perform this action" },
+        { status: 401 }
+      );
+    }
+
+    await prisma.feedback.delete({
+      where: {
+        id,
+      },
+    });
+
+    return NextResponse.json({
+      message: "Feedback deleted successfully",
+    });
+  } catch (error: unknown) {
+    console.log("Delete feedback failed: ", error);
+
+    return NextResponse.json(
+      { message: "Unable to delete feedback, please see server logs." },
+      { status: 500 }
+    );
+  }
+}

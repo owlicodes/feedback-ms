@@ -16,11 +16,16 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import useAlertDialogConfigStore from "@/stores/alert-dialog-config-store";
 
+import { useDeleteFeedback } from "./apis/use-delete-feedback";
 import { Feedback } from "./types";
 
 /* eslint-disable react-hooks/rules-of-hooks */
 
 export const columns: ColumnDef<Feedback>[] = [
+  {
+    accessorKey: "boardName",
+    header: "Board",
+  },
   {
     accessorKey: "userName",
     header: "User Name",
@@ -58,30 +63,31 @@ export const columns: ColumnDef<Feedback>[] = [
       const { setAlertDialogConfig } = useAlertDialogConfigStore();
       const { toast } = useToast();
       const router = useRouter();
+      const deleteFeedback = useDeleteFeedback();
 
       const showDeleteAlertDialog = () => {
         setAlertDialogConfig({
           open: true,
           title: `Are you sure you want to delete feedback from ${feedback.userEmail}?`,
           onDelete: async () => {
-            // deleteRoadmap.mutate(feedback.id, {
-            //   onSuccess: (data) => {
-            //     toast({
-            //       title: "Delete Roadmap",
-            //       description: data.message,
-            //     });
-            //     router.refresh();
-            //     setAlertDialogConfig(undefined);
-            //   },
-            //   onError: (error) => {
-            //     toast({
-            //       title: "Delete Roadmap",
-            //       description: error.message,
-            //       variant: "destructive",
-            //     });
-            //     setAlertDialogConfig(undefined);
-            //   },
-            // });
+            deleteFeedback.mutate(feedback.id, {
+              onSuccess: (data) => {
+                toast({
+                  title: "Delete Feedback",
+                  description: data.message,
+                });
+                router.refresh();
+                setAlertDialogConfig(undefined);
+              },
+              onError: (error) => {
+                toast({
+                  title: "Delete Feedback",
+                  description: error.message,
+                  variant: "destructive",
+                });
+                setAlertDialogConfig(undefined);
+              },
+            });
           },
         });
       };
