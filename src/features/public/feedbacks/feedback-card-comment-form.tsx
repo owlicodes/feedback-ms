@@ -17,13 +17,19 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
+import { useCreateFeedbackComment } from "./apis/use-create-feedback-comment";
+
 const formSchema = z.object({
   comment: z.string().trim().min(1, {
     message: "Comment is required.",
   }),
 });
 
-export const FeedbackCommentForm = () => {
+export const FeedbackCardCommentForm = ({
+  feedbackId,
+}: {
+  feedbackId: string;
+}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,12 +37,15 @@ export const FeedbackCommentForm = () => {
     },
   });
   const { toast } = useToast();
+  const createdFeedbackComment = useCreateFeedbackComment();
 
   const onSuccessHandler = (title: string, description: string) => {
     toast({
       title,
       description,
     });
+
+    form.reset();
   };
 
   const onErrorHandler = (title: string, description: string) => {
@@ -48,14 +57,22 @@ export const FeedbackCommentForm = () => {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // createBoard.mutate(values, {
-    //   onSuccess: (data) => {
-    //     onSuccessHandler("Create Category", data.message);
-    //   },
-    //   onError: (error) => {
-    //     onErrorHandler("Create Category", error.message);
-    //   },
-    // });
+    createdFeedbackComment.mutate(
+      {
+        feedbackId,
+        data: {
+          comment: values.comment,
+        },
+      },
+      {
+        onSuccess: (data) => {
+          onSuccessHandler("Create Category", data.message);
+        },
+        onError: (error) => {
+          onErrorHandler("Create Category", error.message);
+        },
+      }
+    );
   };
 
   return (
@@ -78,7 +95,10 @@ export const FeedbackCommentForm = () => {
             </FormItem>
           )}
         />
-        <AppSubmitButton isPending={false} classNames="w-fit" />
+        <AppSubmitButton
+          isPending={createdFeedbackComment.isPending}
+          classNames="w-fit"
+        />
       </form>
     </Form>
   );

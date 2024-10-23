@@ -121,7 +121,20 @@ model Feedback {
   roadmap   Roadmap? @relation(fields: [roadmapId], references: [id])
   roadmapId String?  @db.ObjectId
 
+  Comment Comment[]
+
   @@map("feedback")
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  comment   String
+  createdAt DateTime @default(now())
+
+  feedback   Feedback @relation(fields: [feedbackId], references: [id])
+  feedbackId String   @db.ObjectId
+
+  @@map("comment")
 }
 
 enum FeedbackStatus {

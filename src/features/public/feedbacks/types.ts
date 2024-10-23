@@ -7,3 +7,7 @@ export type CreateFeedback = {
   boardId: string;
   feedback: string;
 };
+
+export type CreateComment = {
+  comment: string;
+};
