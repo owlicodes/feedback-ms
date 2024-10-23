@@ -15,7 +15,7 @@ export async function POST(request: Request, { params }: Params) {
   try {
     const { feedbackId } = params;
     const data = await request.json();
-    const { comment } = data as CreateComment;
+    const { comment, userId } = data as CreateComment;
 
     const session = await auth.api.getSession({
       headers: headers(),
@@ -32,6 +32,7 @@ export async function POST(request: Request, { params }: Params) {
       data: {
         comment,
         feedbackId,
+        userId,
       },
     });
 

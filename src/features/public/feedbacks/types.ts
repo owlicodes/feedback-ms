@@ -10,4 +10,5 @@ export type CreateFeedback = {
 
 export type CreateComment = {
   comment: string;
+  userId: string;
 };

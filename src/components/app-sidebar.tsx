@@ -85,6 +85,10 @@ const items = [
         title: "Ideas",
         url: "/admin/ideas",
       },
+      {
+        title: "Comments",
+        url: "/admin/comments",
+      },
     ],
   },
 ];

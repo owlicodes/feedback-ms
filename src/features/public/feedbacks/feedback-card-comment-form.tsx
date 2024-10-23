@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { client } from "@/lib/client";
 
 import { useCreateFeedbackComment } from "./apis/use-create-feedback-comment";
 
@@ -38,6 +39,7 @@ export const FeedbackCardCommentForm = ({
   });
   const { toast } = useToast();
   const createdFeedbackComment = useCreateFeedbackComment();
+  const session = client.useSession();
 
   const onSuccessHandler = (title: string, description: string) => {
     toast({
@@ -62,6 +64,7 @@ export const FeedbackCardCommentForm = ({
         feedbackId,
         data: {
           comment: values.comment,
+          userId: session.data!.user.id,
         },
       },
       {
