@@ -10,6 +10,43 @@ interface Params {
   };
 }
 
+export async function PATCH(request: Request, { params }: Params) {
+  try {
+    const { id } = params;
+
+    const session = await auth.api.getSession({
+      headers: headers(),
+    });
+
+    if (session?.user.role !== "admin") {
+      return NextResponse.json(
+        { message: "User not authorized to perform this action" },
+        { status: 401 }
+      );
+    }
+
+    await prisma.comment.update({
+      data: {
+        approved: true,
+      },
+      where: {
+        id,
+      },
+    });
+
+    return NextResponse.json({
+      message: "Comment approved successfully",
+    });
+  } catch (error: unknown) {
+    console.log("Approve comment failed: ", error);
+
+    return NextResponse.json(
+      { message: "Unable to approve comment, please see server logs." },
+      { status: 500 }
+    );
+  }
+}
+
 export async function DELETE(request: Request, { params }: Params) {
   try {
     const { id } = params;

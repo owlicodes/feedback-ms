@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { MoreHorizontal, Trash } from "lucide-react";
+import { Check, MoreHorizontal, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +16,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import useAlertDialogConfigStore from "@/stores/alert-dialog-config-store";
 
-import { useDeleteComment } from "./apis/use-delete-board";
+import { useApproveComment } from "./apis/use-approve-comment";
+import { useDeleteComment } from "./apis/use-delete-comment";
 import { TComment } from "./types";
 
 /* eslint-disable react-hooks/rules-of-hooks */
@@ -33,6 +34,16 @@ export const columns: ColumnDef<TComment>[] = [
   {
     accessorKey: "user.email",
     header: "User Email",
+  },
+  {
+    accessorKey: "approved",
+    header: "Approved",
+    cell: ({ row }) => {
+      const approved = row.getValue("approved") as Boolean;
+      const displayText = approved ? "Yes" : "No";
+
+      return <div>{displayText}</div>;
+    },
   },
   {
     accessorKey: "createdAt",
@@ -52,6 +63,26 @@ export const columns: ColumnDef<TComment>[] = [
       const { toast } = useToast();
       const router = useRouter();
       const deleteComment = useDeleteComment();
+      const approveComment = useApproveComment();
+
+      const approve = () => {
+        approveComment.mutate(comment.id, {
+          onSuccess: (data) => {
+            toast({
+              title: "Approve Comment",
+              description: data.message,
+            });
+            router.refresh();
+          },
+          onError: (error) => {
+            toast({
+              title: "Approve Comment",
+              description: error.message,
+              variant: "destructive",
+            });
+          },
+        });
+      };
 
       const showDeleteAlertDialog = () => {
         setAlertDialogConfig({
@@ -89,6 +120,12 @@ export const columns: ColumnDef<TComment>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownMenuItem className="cursor-pointer" onClick={approve}>
+              <div className="flex items-center gap-2">
+                <Check className="h-4 w-4" />
+                <span>Approve</span>
+              </div>
+            </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer"
               onClick={showDeleteAlertDialog}
