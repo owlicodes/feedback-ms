@@ -11,7 +11,7 @@ const createComment = ({
   data: CreateComment;
 }): Promise<{ message: string }> => {
   return axios
-    .post(`/api/comment/${feedbackId}`, data)
+    .post(`/api/comment/feedback/${feedbackId}`, data)
     .then((response) => response.data)
     .catch((error) => {
       throw error.response.data;
