@@ -28,6 +28,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import useSheetConfigStore from "@/stores/sheet-config-store";
 
+import { useCategories } from "../categories/apis/use-categories";
 import { useRoadmaps } from "../roadmaps/apis/use-roadmaps";
 import { Feedback } from "./types";
 
@@ -70,6 +71,7 @@ export const FeedbackForm = ({ data }: { data: Feedback }) => {
   const router = useRouter();
   const { setSheetConfig } = useSheetConfigStore();
   const roadmaps = useRoadmaps();
+  const categories = useCategories();
 
   const onSuccessHandler = (title: string, description: string) => {
     toast({
@@ -202,9 +204,11 @@ export const FeedbackForm = ({ data }: { data: Feedback }) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="m@example.com">m@example.com</SelectItem>
-                    <SelectItem value="m@google.com">m@google.com</SelectItem>
-                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    {categories.data?.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
