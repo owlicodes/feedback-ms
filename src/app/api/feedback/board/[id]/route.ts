@@ -20,6 +20,14 @@ export async function GET(request: Request, { params }: Params) {
       include: {
         user: true,
         roadmap: true,
+        comments: {
+          where: {
+            approved: true,
+          },
+          include: {
+            user: true,
+          },
+        },
       },
     });
 

@@ -122,7 +122,7 @@ model Feedback {
   roadmap   Roadmap? @relation(fields: [roadmapId], references: [id])
   roadmapId String?  @db.ObjectId
 
-  Comment Comment[]
+  comments Comment[]
 
   @@map("feedback")
 }

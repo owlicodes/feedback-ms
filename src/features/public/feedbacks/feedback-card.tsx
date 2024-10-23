@@ -33,7 +33,10 @@ export default function FeedbackCard({ feedback }: FeedbackCardProps) {
           </div>
         </div>
       </CardContent>
-      <FeedbackCardComments feedbackId={feedback.id} />
+      <FeedbackCardComments
+        feedbackId={feedback.id}
+        comments={feedback.comments}
+      />
     </Card>
   );
 }
