@@ -32,7 +32,7 @@ export const FeedbackDetails = () => {
 
   if (feedback.data) {
     return (
-      <div>
+      <div className="bg-white p-4 shadow-md">
         <FeedbackForm data={feedback.data} />
       </div>
     );

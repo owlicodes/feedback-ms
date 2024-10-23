@@ -28,6 +28,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import useSheetConfigStore from "@/stores/sheet-config-store";
 
+import { useRoadmaps } from "../roadmaps/apis/use-roadmaps";
 import { Feedback } from "./types";
 
 const formSchema = z.object({
@@ -48,7 +49,7 @@ const formSchema = z.object({
   }),
   roadmapId: z.string().nullable(),
   categoryId: z.string().nullable(),
-  boardId: z.string().nullable(),
+  boardId: z.string(),
   status: z.boolean().default(false).optional(),
 });
 
@@ -68,6 +69,7 @@ export const FeedbackForm = ({ data }: { data: Feedback }) => {
   const { toast } = useToast();
   const router = useRouter();
   const { setSheetConfig } = useSheetConfigStore();
+  const roadmaps = useRoadmaps();
 
   const onSuccessHandler = (title: string, description: string) => {
     toast({
@@ -173,9 +175,11 @@ export const FeedbackForm = ({ data }: { data: Feedback }) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="m@example.com">m@example.com</SelectItem>
-                    <SelectItem value="m@google.com">m@google.com</SelectItem>
-                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    {roadmaps.data?.map((roadmap) => (
+                      <SelectItem key={roadmap.id} value={roadmap.id}>
+                        {roadmap.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -215,7 +219,7 @@ export const FeedbackForm = ({ data }: { data: Feedback }) => {
                 <FormLabel>Board</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value ? field.value : undefined}
+                  defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
