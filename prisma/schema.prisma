@@ -130,6 +130,7 @@ model Feedback {
 model Comment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   comment   String
+  approved  Boolean  @default(false)
   createdAt DateTime @default(now())
 
   feedback   Feedback @relation(fields: [feedbackId], references: [id])
