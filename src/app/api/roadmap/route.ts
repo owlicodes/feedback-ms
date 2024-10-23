@@ -5,7 +5,7 @@ import { CreateRoadmap } from "@/features/admin/roadmaps/types";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const session = await auth.api.getSession({
       headers: headers(),
