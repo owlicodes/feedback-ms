@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       message:
-        "Feedback created successfully. Our team will review your feedback and we will let you know once we have an action. Thank you!",
+        "Feedback created successfully. Our team will review your feedback before making it public. Thank you!",
     });
   } catch (error: unknown) {
     console.log("Create feedback failed: ", error);

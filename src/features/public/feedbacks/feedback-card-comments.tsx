@@ -7,6 +7,8 @@ import { MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CardContent, CardFooter } from "@/components/ui/card";
 
+import { FeedbackCommentForm } from "./feedback-comment-form";
+
 export const FeedbackCardComments = () => {
   const [expanded, setExpanded] = useState(false);
 
@@ -25,7 +27,8 @@ export const FeedbackCardComments = () => {
       </CardFooter>
       {expanded && (
         <CardContent className="bg-secondary/20 p-6">
-          <div className="space-y-4">
+          <FeedbackCommentForm />
+          <div className="mt-8 space-y-4">
             <p className="text-sm">
               <strong>User1:</strong> Great post! Very insightful.
             </p>
