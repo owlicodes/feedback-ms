@@ -9,4 +9,7 @@ export type Feedback = {
   roadmapName: string | undefined;
   status: string;
   createdAt: Date;
+  boardId: string;
+  boardName: string;
+  feedback: string;
 };

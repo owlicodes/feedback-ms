@@ -9,6 +9,7 @@ export default async function IdeasPage() {
       user: true,
       roadmap: true,
       category: true,
+      board: true,
     },
   });
 
@@ -26,6 +27,9 @@ export default async function IdeasPage() {
       roadmapId: feedback.roadmapId,
       roadmapName: feedback.roadmap?.name,
       status: feedback.status,
+      boardId: feedback.boardId,
+      boardName: feedback.board.name,
+      feedback: feedback.feedback,
     }));
   };
 
