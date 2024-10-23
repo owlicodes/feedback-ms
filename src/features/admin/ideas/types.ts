@@ -1,3 +1,5 @@
+import { FeedbackStatus } from "@prisma/client";
+
 export type Feedback = {
   id: string;
   userId: string;
@@ -12,4 +14,11 @@ export type Feedback = {
   boardId: string;
   boardName: string;
   feedback: string;
+};
+
+export type UpdateFeedback = {
+  roadmapId: string | null;
+  categoryId: string | null;
+  boardId: string | null;
+  status: FeedbackStatus;
 };

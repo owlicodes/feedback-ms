@@ -1,14 +1,17 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
-import { Feedback } from "@/features/admin/ideas/types";
+import { Feedback, UpdateFeedback } from "@/features/admin/ideas/types";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+interface Params {
+  params: {
+    id: string;
+  };
+}
+
+export async function GET(request: Request, { params }: Params) {
   try {
     const id = (await params).id;
 
@@ -61,6 +64,48 @@ export async function GET(
 
     return NextResponse.json(
       { message: "Unable to fetch feedback details, please see server logs." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(request: Request, { params }: Params) {
+  try {
+    const { id } = params;
+    const data = await request.json();
+    const { boardId, categoryId, roadmapId, status } = data as UpdateFeedback;
+
+    const session = await auth.api.getSession({
+      headers: headers(),
+    });
+
+    if (session?.user.role !== "admin") {
+      return NextResponse.json(
+        { message: "User not authorized to perform this action" },
+        { status: 401 }
+      );
+    }
+
+    await prisma.feedback.update({
+      data: {
+        ...(boardId !== null && { boardId }),
+        ...(categoryId !== null && { categoryId }),
+        ...(roadmapId !== null && { roadmapId }),
+        status,
+      },
+      where: {
+        id,
+      },
+    });
+
+    return NextResponse.json({
+      message: "Feedback updated successfully",
+    });
+  } catch (error: unknown) {
+    console.log("Update feedback failed: ", error);
+
+    return NextResponse.json(
+      { message: "Unable to update feedback, please see server logs." },
       { status: 500 }
     );
   }

@@ -26,11 +26,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import useSheetConfigStore from "@/stores/sheet-config-store";
 
 import { useBoards } from "../boards/apis/use-boards";
 import { useCategories } from "../categories/apis/use-categories";
 import { useRoadmaps } from "../roadmaps/apis/use-roadmaps";
+import { useUpdateFeedback } from "./apis/use-update-feedback";
 import { Feedback } from "./types";
 
 const formSchema = z.object({
@@ -70,10 +70,10 @@ export const FeedbackForm = ({ data }: { data: Feedback }) => {
   });
   const { toast } = useToast();
   const router = useRouter();
-  const { setSheetConfig } = useSheetConfigStore();
   const roadmaps = useRoadmaps();
   const categories = useCategories();
   const boards = useBoards();
+  const updateFeedback = useUpdateFeedback();
 
   const onSuccessHandler = (title: string, description: string) => {
     toast({
@@ -82,8 +82,6 @@ export const FeedbackForm = ({ data }: { data: Feedback }) => {
     });
 
     router.refresh();
-
-    setSheetConfig(undefined);
   };
 
   const onErrorHandler = (title: string, description: string) => {
@@ -96,14 +94,25 @@ export const FeedbackForm = ({ data }: { data: Feedback }) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
-    // createRoadmap.mutate(values, {
-    //   onSuccess: (data) => {
-    //     onSuccessHandler("Create Roadmap", data.message);
-    //   },
-    //   onError: (error) => {
-    //     onErrorHandler("Create Roadmap", error.message);
-    //   },
-    // });
+    updateFeedback.mutate(
+      {
+        id: data.id,
+        data: {
+          boardId: values.boardId,
+          categoryId: values.categoryId,
+          roadmapId: values.roadmapId,
+          status: values.status ? "APPROVED" : "PENDING",
+        },
+      },
+      {
+        onSuccess: (data) => {
+          onSuccessHandler("Update Feedback", data.message);
+        },
+        onError: (error) => {
+          onErrorHandler("Update Feedback", error.message);
+        },
+      }
+    );
   };
 
   return (
@@ -264,7 +273,10 @@ export const FeedbackForm = ({ data }: { data: Feedback }) => {
             </FormItem>
           )}
         />
-        <AppSubmitButton isPending={false} classNames="w-fit" />
+        <AppSubmitButton
+          isPending={updateFeedback.isPending}
+          classNames="w-fit"
+        />
       </form>
     </Form>
   );
