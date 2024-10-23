@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { ChevronUp, MessageSquare } from "lucide-react";
+import { MessageSquare, ThumbsUp } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -31,25 +31,30 @@ export default function FeedbackCard({ feedback }: FeedbackCardProps) {
     <Card className="w-full">
       <CardContent className="p-6">
         <div className="flex items-start space-x-4">
-          <Button size="icon" className="h-9 w-9" onClick={handleUpvote}>
-            <ChevronUp className="h-4 w-4" />
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-9 w-9"
+            onClick={handleUpvote}
+          >
+            <ThumbsUp className="h-4 w-4" />
             <span className="sr-only">Upvote</span>
           </Button>
           <div className="flex-1 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Avatar className="h-8 w-8">
+                <Avatar>
                   <AvatarImage
                     src="/placeholder.svg?height=32&width=32"
                     alt="User avatar"
                   />
-                  <AvatarFallback>
+                  <AvatarFallback className="bg-blue-500 text-white">
                     {feedback.user.email.slice(0, 2).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <p className="text-sm font-medium">{feedback.user.email}</p>
               </div>
-              <Badge variant="secondary">{feedback.roadmap.name}</Badge>
+              <Badge variant="secondary">{feedback.roadmap?.name}</Badge>
             </div>
             <p className="pl-2 text-sm">{feedback.feedback}</p>
           </div>

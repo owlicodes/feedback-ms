@@ -44,8 +44,8 @@ export const FeedbackForm = ({
   });
   const { toast } = useToast();
   const router = useRouter();
-  const createFeedback = useCreateFeedback();
   const { board } = useSelectedBoardStore();
+  const createFeedback = useCreateFeedback(board?.id);
 
   const onSuccessHandler = (title: string, description: string) => {
     toast({

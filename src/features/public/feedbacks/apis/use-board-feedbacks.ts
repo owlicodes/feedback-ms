@@ -3,6 +3,15 @@ import axios from "axios";
 
 import { FeedbackData } from "../types";
 
+export const queryKeys = {
+  root: ["feedback"],
+  byBoardId: (boardId: string | undefined) => [
+    ...queryKeys.root,
+    "board",
+    boardId,
+  ],
+};
+
 const getBoardFeedbacks = (
   boardId: string | undefined
 ): Promise<FeedbackData[]> => {
@@ -17,7 +26,7 @@ const getBoardFeedbacks = (
 export const useBoardFeedbacks = (boardId: string | undefined) => {
   return useQuery({
     enabled: Boolean(boardId),
-    queryKey: ["feedbacks", "boards", boardId],
+    queryKey: queryKeys.byBoardId(boardId),
     queryFn: () => getBoardFeedbacks(boardId),
   });
 };

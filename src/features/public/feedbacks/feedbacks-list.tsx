@@ -28,7 +28,7 @@ export const FeedbacksList = () => {
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       {feedbacks.data.map((feedback) => (
         <FeedbackCard key={feedback.id} feedback={feedback} />
       ))}
