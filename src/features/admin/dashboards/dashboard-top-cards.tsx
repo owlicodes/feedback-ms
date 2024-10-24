@@ -3,7 +3,7 @@ import { GitBranch, Lightbulb, MessageSquare, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import prisma from "@/lib/prisma";
 
-export default async function DashboardTopCards() {
+export const DashboardTopCards = async () => {
   const users = await prisma.user.count({
     where: {
       role: {
@@ -13,13 +13,17 @@ export default async function DashboardTopCards() {
   });
   const comments = await prisma.comment.count();
   const roadmaps = await prisma.roadmap.count();
-  const feedbacks = await prisma.feedback.count();
+  const feedbacks = await prisma.feedback.count({
+    where: {
+      status: "APPROVED",
+    },
+  });
 
   const cards = [
     { title: "Feedback Users", count: users, icon: Users },
     { title: "Overall Comments", count: comments, icon: MessageSquare },
     { title: "Roadmap Statuses", count: roadmaps, icon: GitBranch },
-    { title: "Feedback Ideas", count: feedbacks, icon: Lightbulb },
+    { title: "Approved Feedbacks", count: feedbacks, icon: Lightbulb },
   ];
 
   return (
@@ -39,4 +43,4 @@ export default async function DashboardTopCards() {
       ))}
     </div>
   );
-}
+};
