@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 type TChartData = {
-  board: string;
-  feedbacks: number;
+  roadmap: string;
+  count: number;
   fill: string;
 };
 
@@ -14,21 +14,21 @@ type TChartConfig = {
   };
 };
 
-const getChartData = (): Promise<{
+const getBarData = (): Promise<{
   chartData: Array<TChartData>;
   chartConfig: TChartConfig;
 }> => {
   return axios
-    .get("/api/dashboard/donut")
+    .get("/api/dashboard/bar")
     .then((response) => response.data)
     .catch((error) => {
       throw error.response.data;
     });
 };
 
-export const useChartData = () => {
+export const useBarData = () => {
   return useQuery({
-    queryKey: ["dashboard", "chart-data"],
-    queryFn: getChartData,
+    queryKey: ["dashboard", "bar-data"],
+    queryFn: getBarData,
   });
 };

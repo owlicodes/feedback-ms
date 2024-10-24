@@ -1,5 +1,6 @@
 "use client";
 
+import { Loader } from "lucide-react";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
 import {
@@ -10,37 +11,32 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-const chartData = [
-  { roadmap: "pending", count: 200, fill: "var(--color-pending)" },
-  { roadmap: "inprogress", count: 275, fill: "var(--color-inprogress)" },
-  { roadmap: "resolved", count: 187, fill: "var(--color-resolved)" },
-];
-
-const chartConfig = {
-  counts: {
-    label: "Counts",
-  },
-  pending: {
-    label: "Pending",
-    color: "hsl(var(--chart-1))",
-  },
-  inprogress: {
-    label: "In Progress",
-    color: "hsl(var(--chart-2))",
-  },
-  resolved: {
-    label: "Resolved",
-    color: "hsl(var(--chart-3))",
-  },
-} satisfies ChartConfig;
+import { useBarData } from "./apis/use-bar-data";
 
 export const DashboardBarChart = () => {
+  const chartData = useBarData();
+
+  if (chartData.isLoading) {
+    return (
+      <Card className="flex w-full items-center justify-center p-4">
+        <Loader className="h-4 w-4 animate-spin" />
+      </Card>
+    );
+  }
+
+  if (!chartData.data) {
+    return (
+      <Card className="flex w-full items-center justify-center p-4">
+        <p>Nothing display at the moment.</p>
+      </Card>
+    );
+  }
+
   return (
     <Card className="h-full">
       <CardHeader>
@@ -50,13 +46,13 @@ export const DashboardBarChart = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={chartData.data.chartConfig}>
           <BarChart
             accessibilityLayer
-            data={chartData}
+            data={chartData.data.chartData}
             layout="vertical"
             margin={{
-              left: 5,
+              left: 16,
             }}
           >
             <YAxis
@@ -66,7 +62,9 @@ export const DashboardBarChart = () => {
               tickMargin={10}
               axisLine={false}
               tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label
+                chartData.data.chartConfig[
+                  value as keyof typeof chartData.data.chartConfig
+                ]?.label
               }
             />
             <XAxis dataKey="count" type="number" hide />
