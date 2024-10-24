@@ -5,15 +5,21 @@ import { ThumbsUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { client } from "@/lib/client";
+import useSelectedBoardStore from "@/stores/selected-board-store";
 
 import { useUpvoteFeedback } from "./apis/use-upvote-feedback";
 
 type FeedbackCardUpvoteProps = {
   feedbackId: string;
+  isUpvoted: boolean;
 };
 
-export const FeedbackCardUpvote = ({ feedbackId }: FeedbackCardUpvoteProps) => {
-  const upvoteFeedback = useUpvoteFeedback();
+export const FeedbackCardUpvote = ({
+  feedbackId,
+  isUpvoted,
+}: FeedbackCardUpvoteProps) => {
+  const { board } = useSelectedBoardStore();
+  const upvoteFeedback = useUpvoteFeedback(board?.id);
   const session = client.useSession();
   const { toast } = useToast();
 
@@ -46,7 +52,13 @@ export const FeedbackCardUpvote = ({ feedbackId }: FeedbackCardUpvoteProps) => {
   };
 
   return (
-    <Button variant="outline" size="icon" className="h-9 w-9" onClick={upvote}>
+    <Button
+      variant="outline"
+      size="icon"
+      className="h-9 w-9 bg-blue-600 text-white"
+      onClick={upvote}
+      disabled={isUpvoted}
+    >
       <ThumbsUp className="h-4 w-4" />
       <span className="sr-only">Upvote</span>
     </Button>

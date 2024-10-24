@@ -1,7 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 import { TCreateUpvote } from "../types";
+import { queryKeys } from "./use-board-feedbacks";
 
 const upvoteFeedback = (data: TCreateUpvote): Promise<{ message: string }> => {
   return axios
@@ -12,9 +13,16 @@ const upvoteFeedback = (data: TCreateUpvote): Promise<{ message: string }> => {
     });
 };
 
-export const useUpvoteFeedback = () => {
+export const useUpvoteFeedback = (boardId: string | undefined) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: upvoteFeedback,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.byBoardId(boardId),
+      });
+    },
     onError: (error: { message: string }) => {
       return error;
     },

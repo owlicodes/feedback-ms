@@ -28,6 +28,7 @@ export async function GET(request: Request, { params }: Params) {
             user: true,
           },
         },
+        upvotes: true,
       },
     });
 

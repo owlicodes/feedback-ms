@@ -15,9 +15,11 @@ import { FeedbackCardCommentForm } from "./feedback-card-comment-form";
 export const FeedbackCardComments = ({
   feedbackId,
   comments,
+  upvotes,
 }: {
   feedbackId: string;
   comments: Array<Comment & { user: User }>;
+  upvotes: number;
 }) => {
   const [expanded, setExpanded] = useState(false);
   const session = client.useSession();
@@ -29,7 +31,9 @@ export const FeedbackCardComments = ({
   return (
     <>
       <CardFooter className="flex items-center justify-between bg-secondary/10 px-6">
-        <div className="text-sm text-muted-foreground">0 upvote</div>
+        <div className="text-sm text-muted-foreground">
+          {upvotes} {upvotes < 1 ? "upvote" : "upvotes"}
+        </div>
         <Button variant="ghost" size="sm" onClick={toggleExpand}>
           <MessageSquare className="mr-2 h-4 w-4" />
           {expanded ? "Hide" : "Show"} Comments

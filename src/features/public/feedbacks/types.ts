@@ -1,8 +1,8 @@
-import { Comment, Feedback, Roadmap, User } from "@prisma/client";
+import { Comment, Feedback, Roadmap, Upvote, User } from "@prisma/client";
 
 export type FeedbackData = Feedback & { user: User } & { roadmap: Roadmap } & {
   comments: Array<Comment & { user: User }>;
-};
+} & { upvotes: Array<Upvote> };
 
 export type CreateFeedback = {
   userId: string;
