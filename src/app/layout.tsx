@@ -6,8 +6,8 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Next.js Starter App",
-  description: "A basic starter for next.js",
+  title: "Feedback MS",
+  description: "Feedback Management System built with Next.js",
 };
 
 export default function RootLayout({
