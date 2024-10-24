@@ -14,3 +14,8 @@ export type CreateComment = {
   comment: string;
   userId: string;
 };
+
+export type TCreateUpvote = {
+  feedbackId: string;
+  userId: string;
+};

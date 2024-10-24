@@ -20,7 +20,9 @@ export default function FeedbackCard({ feedback }: FeedbackCardProps) {
     <Card className="w-full">
       <CardContent className="p-6">
         <div className="flex items-start space-x-4">
-          {session.data?.user && <FeedbackCardUpvote />}
+          {session.data?.user && (
+            <FeedbackCardUpvote feedbackId={feedback.id} />
+          )}
           <div className="flex-1 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">

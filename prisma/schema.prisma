@@ -23,8 +23,10 @@ model User {
   banned     Boolean?
   banReason  String?
   banExpires Int?
-  Feedback   Feedback[]
-  Comment    Comment[]
+
+  feedbacks Feedback[]
+  comments  Comment[]
+  upvotes   Upvote[]
 
   @@map("users")
 }
@@ -75,7 +77,7 @@ model Category {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  Feedback Feedback[]
+  feedbacks Feedback[]
 
   @@map("category")
 }
@@ -87,18 +89,19 @@ model Roadmap {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  Feedback Feedback[]
+  feedbacks Feedback[]
 
   @@map("roadmap")
 }
 
 model Board {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  Feedback    Feedback[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  feedbacks Feedback[]
 
   @@map("board")
 }
@@ -123,6 +126,7 @@ model Feedback {
   roadmapId String?  @db.ObjectId
 
   comments Comment[]
+  upvotes  Upvote[]
 
   @@map("feedback")
 }
@@ -140,6 +144,19 @@ model Comment {
   userId String
 
   @@map("comment")
+}
+
+model Upvote {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+
+  feedback   Feedback @relation(fields: [feedbackId], references: [id])
+  feedbackId String   @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@map("upvote")
 }
 
 enum FeedbackStatus {
