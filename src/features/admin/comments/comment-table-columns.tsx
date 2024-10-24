@@ -39,7 +39,7 @@ export const columns: ColumnDef<TComment>[] = [
     accessorKey: "approved",
     header: "Approved",
     cell: ({ row }) => {
-      const approved = row.getValue("approved") as Boolean;
+      const approved = row.getValue("approved") as boolean;
       const displayText = approved ? "Yes" : "No";
 
       return <div>{displayText}</div>;
@@ -87,7 +87,7 @@ export const columns: ColumnDef<TComment>[] = [
       const showDeleteAlertDialog = () => {
         setAlertDialogConfig({
           open: true,
-          title: `Are you sure you want to delete comment?`,
+          title: "Are you sure you want to delete comment?",
           onDelete: async () => {
             deleteComment.mutate(comment.id, {
               onSuccess: (data) => {
